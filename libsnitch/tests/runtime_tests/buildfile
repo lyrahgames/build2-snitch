@@ -6,3 +6,32 @@ exe{snitch_runtime_tests_self}: {hxx cxx}{** -snitch_main} ixx{snitch_main} $lib
 }
 
 cxx.poptions += -DSNITCH_TEST_WITH_SNITCH "-I$src_base"
+
+if ($cxx.target.system == 'wasm32-emscripten')
+{
+  cxx.poptions += -DSNITCH_PLATFORM_WASM
+  # Increase default stack size to match default for Linux
+  cxx.loptions += "SHELL:-s STACK_SIZE=8388608"
+}
+else
+{
+  switch $cxx.target.class
+  {
+    case 'windows'
+    {
+      cxx.poptions += -DSNITCH_PLATFORM_WINDOWS
+      if ($cxx.id == 'msvc')
+      {
+        cxx.poptions += -DSNITCH_COMPILER_MSVC
+        # Increase default stack size to match default for Linux
+        cxx.loptions += /STACK:8388608
+      }
+    }
+
+    case 'linux'
+      cxx.poptions += -DSNITCH_PLATFORM_LINUX
+
+    case 'macos'
+      cxx.poptions += -DSNITCH_PLATFORM_OSX
+  }
+}
