@@ -1,0 +1,44 @@
+# Uncomment to suppress warnings coming from external libraries.
+#
+#cxx.internal.scope = current
+
+cxx.std = latest
+
+using cxx
+
+hxx{*}: extension = hpp
+ixx{*}: extension = cpp
+cxx{*}: extension = cpp
+
+# Assume headers are NOT importable unless stated otherwise.
+#
+hxx{*}: cxx.importable = false
+
+# The test target for cross-testing (running tests under Wine, etc).
+#
+test.target = $cxx.target
+
+# Configuration variables that are directly transferred to snitch.
+#
+config [uint64] config.libsnitch.max_test_cases           ?= 5000
+config [uint64] config.libsnitch.max_nested_sections      ?=    8
+config [uint64] config.libsnitch.max_expr_length          ?= 1024
+config [uint64] config.libsnitch.max_message_length       ?= 1024
+config [uint64] config.libsnitch.max_test_name_length     ?= 1024
+config [uint64] config.libsnitch.max_tag_length           ?=  256
+config [uint64] config.libsnitch.max_captures             ?=    8
+config [uint64] config.libsnitch.max_capture_length       ?=  256
+config [uint64] config.libsnitch.max_unique_tags          ?= 1024
+config [uint64] config.libsnitch.max_command_line_args    ?= 1024
+config [uint64] config.libsnitch.max_registered_reporters ?=    8
+config [uint64] config.libsnitch.max_path_length          ?= 1024
+#
+config [bool] config.libsnitch.with_exceptions                 ?=  true
+config [bool] config.libsnitch.with_timings                    ?=  true
+config [bool] config.libsnitch.with_shorthand_macros           ?=  true
+config [bool] config.libsnitch.default_with_color              ?=  true
+config [bool] config.libsnitch.constexpr_float_use_bitcast     ?=  true
+config [bool] config.libsnitch.decompose_successful_assertions ?= false
+config [bool] config.libsnitch.with_all_reporters              ?=  true
+config [bool] config.libsnitch.with_teamcity_reporter          ?= false
+config [bool] config.libsnitch.with_catch2_reporter            ?= false

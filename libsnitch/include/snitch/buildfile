@@ -1,0 +1,57 @@
+using autoconf
+
+pub_hdrs = hxx{** -snitch_config} hxx{snitch_config}
+
+./: $pub_hdrs
+
+in{snitch_config.hpp.config.in}: file{snitch_config.hpp.config}
+{{
+  sed -e 's/\$\{(.+)\}/@\1@/g' $path($<) >$path($>)
+}}
+
+hxx{snitch_config}: in{snitch_config.hpp.config.in}
+{
+  autoconf.flavor = cmake
+
+  PROJECT_VERSION = $version
+  SNITCH_FULL_VERSION = $version
+  PROJECT_VERSION_MAJOR = $version.major
+  PROJECT_VERSION_MINOR = $version.minor
+  PROJECT_VERSION_PATCH = $version.patch
+
+  SNITCH_MAX_TEST_CASES = $config.libsnitch.max_test_cases
+  SNITCH_MAX_NESTED_SECTIONS = $config.libsnitch.max_nested_sections
+  SNITCH_MAX_EXPR_LENGTH = $config.libsnitch.max_expr_length
+  SNITCH_MAX_MESSAGE_LENGTH = $config.libsnitch.max_message_length
+  SNITCH_MAX_TEST_NAME_LENGTH = $config.libsnitch.max_test_name_length
+  SNITCH_MAX_TAG_LENGTH = $config.libsnitch.max_tag_length
+  SNITCH_MAX_CAPTURES = $config.libsnitch.max_captures
+  SNITCH_MAX_CAPTURE_LENGTH = $config.libsnitch.max_capture_length
+  SNITCH_MAX_UNIQUE_TAGS = $config.libsnitch.max_unique_tags
+  SNITCH_MAX_COMMAND_LINE_ARGS = $config.libsnitch.max_command_line_args
+  SNITCH_MAX_REGISTERED_REPORTERS = $config.libsnitch.max_registered_reporters
+  SNITCH_MAX_PATH_LENGTH = $config.libsnitch.max_path_length
+
+  SNITCH_DEFINE_MAIN = false
+  SNITCH_WITH_EXCEPTIONS = $config.libsnitch.with_exceptions
+  SNITCH_WITH_TIMINGS = $config.libsnitch.with_timings
+  SNITCH_WITH_SHORTHAND_MACROS = $config.libsnitch.with_shorthand_macros
+  SNITCH_DEFAULT_WITH_COLOR = $config.libsnitch.default_with_color
+  SNITCH_CONSTEXPR_FLOAT_USE_BITCAST = $config.libsnitch.constexpr_float_use_bitcast
+  SNITCH_DECOMPOSE_SUCCESSFUL_ASSERTIONS = $config.libsnitch.decompose_successful_assertions
+  SNITCH_WITH_ALL_REPORTERS = $config.libsnitch.with_all_reporters
+  SNITCH_WITH_TEAMCITY_REPORTER = $config.libsnitch.with_teamcity_reporter
+  SNITCH_WITH_CATCH2_REPORTER = $config.libsnitch.with_catch2_reporter
+  SNITCH_SHARED_LIBRARY = false
+}
+
+hxx{snitch_config}: cxx.importable = false
+
+# Install into the snitch/ subdirectory of, say, /usr/include/
+# recreating subdirectories.
+#
+hxx{*}:
+{
+  install         = include/snitch/
+  install.subdirs = true
+}

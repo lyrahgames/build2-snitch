@@ -1,0 +1,67 @@
+# Public headers.
+#
+pub = [dir_path] ../include/snitch/
+
+include $pub
+
+pub_hdrs = $($pub/ pub_hdrs)
+
+lib{snitch}: $pub/{$pub_hdrs}
+
+# Private headers and sources as well as dependencies.
+#
+./: lib{snitch}: cxx{snitch} ixx{** -snitch -snitch_main}
+# lib{snitch}: cxx{** -snitch}
+./: lib{snitch-main}
+
+liba{snitch-main}: liba{snitch-main-static}
+libs{snitch-main}: liba{snitch-main-shared}
+
+liba{snitch-main-static}: obja{main-static} liba{snitch}
+liba{snitch-main-shared}: obja{main-shared} libs{snitch}
+
+obja{main-static}: cxx{snitch_main} liba{snitch}
+obja{main-shared}: cxx{snitch_main} libs{snitch}
+obja{main-static main-shared}: cxx.poptions += -DSNITCH_DEFINE_MAIN=1
+
+liba{snitch-main-static snitch-main-shared}: bin.whole = true
+
+# Build options.
+#
+out_pfx_inc = [dir_path] $out_root/include/
+src_pfx_inc = [dir_path] $src_root/include/
+out_pfx_src = [dir_path] $out_root/src/
+src_pfx_src = [dir_path] $src_root/src/
+
+cxx.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
+                "-I$out_pfx_inc" "-I$src_pfx_inc"
+
+# {hbmia obja}{*}: cxx.poptions += -DSNITCH_STATIC_BUILD
+{hbmia obja}{*}: cxx.poptions += -DSNITCH_SHARED_BUILD=0
+{hbmis objs}{*}: cxx.poptions += -DSNITCH_SHARED_BUILD=1
+
+obja{snitch}: cxx.poptions += -DSNITCH_SHARED_BUILD=0
+objs{snitch}: cxx.poptions += -DSNITCH_SHARED_BUILD=1
+
+# Export options.
+#
+lib{snitch}: cxx.export.poptions = "-I$out_pfx_inc" "-I$src_pfx_inc"
+
+liba{snitch}: cxx.export.poptions += -DSNITCH_STATIC
+libs{snitch}: cxx.export.poptions += -DSNITCH_SHARED
+
+liba{snitch-main}: cxx.export.libs = lib{snitch}
+libs{snitch-main}: cxx.export.libs = liba{snitch-main-shared} lib{snitch}
+
+# For pre-releases use the complete version to make sure they cannot be used
+# in place of another pre-release or the final version. See the version module
+# for details on the version.* variable values.
+#
+if $version.pre_release
+  lib{snitch snitch-main}: bin.lib.version = "-$version.project_id"
+else
+  lib{snitch snitch-main}: bin.lib.version = "-$version.major.$version.minor"
+
+# Don't install private headers.
+#
+{hxx ixx}{*}: install = false

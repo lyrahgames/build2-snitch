@@ -1,0 +1,1 @@
+../../../upstream/include/snitch/snitch_macros_warnings.hpp
