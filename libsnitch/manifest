@@ -22,11 +22,11 @@ requires: c++20
 
 default-build-config:
 \
-config.libsnitch.max_test_cases = 200
-config.libsnitch.max_expr_length = 128
-config.libsnitch.max_message_length = 128
-config.libsnitch.max_test_name_length = 128
-config.libsnitch.max_capture_length = 128
+config.libsnitch.max_test_cases=200
+config.libsnitch.max_expr_length=128
+config.libsnitch.max_message_length=128
+config.libsnitch.max_test_name_length=128
+config.libsnitch.max_capture_length=128
 ;
 Testing snitch requires a different configuration.
 \
