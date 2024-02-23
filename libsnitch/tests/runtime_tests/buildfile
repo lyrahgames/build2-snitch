@@ -1,5 +1,8 @@
 import libs = libsnitch%lib{snitch-main}
 
 exe{snitch_runtime_tests_self}: {hxx cxx}{** -snitch_main} ixx{snitch_main} $libs
+{
+  test.arguments = --color never
+}
 
 cxx.poptions += -DSNITCH_TEST_WITH_SNITCH "-I$src_base"
