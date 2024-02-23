@@ -38,7 +38,7 @@ cxx.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
 
 # {hbmia obja}{*}: cxx.poptions += -DSNITCH_STATIC_BUILD
 {hbmia obja}{*}: cxx.poptions += -DSNITCH_SHARED_BUILD=0
-{hbmis objs}{*}: cxx.poptions += -DSNITCH_SHARED_BUILD=1
+{hbmis objs}{*}: cxx.poptions += -DSNITCH_SHARED_BUILD=1 -DSNITCH_EXPORTS
 
 obja{snitch}: cxx.poptions += -DSNITCH_SHARED_BUILD=0
 objs{snitch}: cxx.poptions += -DSNITCH_SHARED_BUILD=1
@@ -47,8 +47,8 @@ objs{snitch}: cxx.poptions += -DSNITCH_SHARED_BUILD=1
 #
 lib{snitch}: cxx.export.poptions = "-I$out_pfx_inc" "-I$src_pfx_inc"
 
-liba{snitch}: cxx.export.poptions += -DSNITCH_STATIC
-libs{snitch}: cxx.export.poptions += -DSNITCH_SHARED
+liba{snitch}: cxx.export.poptions += -DSNITCH_SHARED_BUILD=0
+libs{snitch}: cxx.export.poptions += -DSNITCH_SHARED_BUILD=1
 
 liba{snitch-main}: cxx.export.libs = lib{snitch}
 libs{snitch-main}: cxx.export.libs = liba{snitch-main-shared} lib{snitch}
