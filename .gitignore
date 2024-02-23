@@ -9,6 +9,7 @@
 !*.cpp
 !*.in
 !*.config
+!*.orig
 
 !.build2/**
 !buildfile

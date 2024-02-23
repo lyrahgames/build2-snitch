@@ -36,19 +36,18 @@ src_pfx_src = [dir_path] $src_root/src/
 cxx.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
                 "-I$out_pfx_inc" "-I$src_pfx_inc"
 
-# {hbmia obja}{*}: cxx.poptions += -DSNITCH_STATIC_BUILD
-{hbmia obja}{*}: cxx.poptions += -DSNITCH_SHARED_BUILD=0
-{hbmis objs}{*}: cxx.poptions += -DSNITCH_SHARED_BUILD=1 -DSNITCH_EXPORTS
-
-obja{snitch}: cxx.poptions += -DSNITCH_SHARED_BUILD=0
-objs{snitch}: cxx.poptions += -DSNITCH_SHARED_BUILD=1
+hbmia{*}: cxx.poptions += -DSNITCH_SHARED_BUILD=0 -DSNITCH_STATIC_BUILD
+hbmis{*}: cxx.poptions += -DSNITCH_SHARED_BUILD=1 -DSNITCH_EXPORTS -DSNITCH_SHARED_BUILD
+#
+obja{snitch}: cxx.poptions += -DSNITCH_SHARED_BUILD=0 -DSNITCH_STATIC_BUILD
+objs{snitch}: cxx.poptions += -DSNITCH_SHARED_BUILD=1 -DSNITCH_EXPORTS -DSNITCH_SHARED_BUILD
 
 # Export options.
 #
 lib{snitch}: cxx.export.poptions = "-I$out_pfx_inc" "-I$src_pfx_inc"
 
-liba{snitch}: cxx.export.poptions += -DSNITCH_SHARED_BUILD=0
-libs{snitch}: cxx.export.poptions += -DSNITCH_SHARED_BUILD=1
+liba{snitch}: cxx.export.poptions += -DSNITCH_SHARED_BUILD=0 -DSNITCH_STATIC
+libs{snitch}: cxx.export.poptions += -DSNITCH_SHARED_BUILD=1 -DSNITCH_SHARED
 
 liba{snitch-main}: cxx.export.libs = lib{snitch}
 libs{snitch-main}: cxx.export.libs = liba{snitch-main-shared} lib{snitch}

@@ -46,6 +46,7 @@ hxx{snitch_config}: in{snitch_config.hpp.config.in}
 }
 
 hxx{snitch_config}: cxx.importable = false
+hxx{export}@./: cxx.importable = false
 
 # Install into the snitch/ subdirectory of, say, /usr/include/
 # recreating subdirectories.
